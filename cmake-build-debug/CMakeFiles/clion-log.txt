@@ -1,0 +1,4 @@
+"C:\Program Files\JetBrains\CLion 2017.3.4\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=C:/TDM-GCC-64/bin/mingw32-make.exe -DCMAKE_C_COMPILER=C:/TDM-GCC-64/bin/x86_64-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=C:/TDM-GCC-64/bin/x86_64-w64-mingw32-g++.exe -G "CodeBlocks - MinGW Makefiles" C:\Users\idanc\CLionProjects\wet1
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/idanc/CLionProjects/wet1/cmake-build-debug
