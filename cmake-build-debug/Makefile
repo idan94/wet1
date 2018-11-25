@@ -122,6 +122,33 @@ wet1/fast:
 	$(MAKE) -f CMakeFiles\wet1.dir\build.make CMakeFiles/wet1.dir/build
 .PHONY : wet1/fast
 
+library1.obj: library1.cpp.obj
+
+.PHONY : library1.obj
+
+# target to build an object file
+library1.cpp.obj:
+	$(MAKE) -f CMakeFiles\wet1.dir\build.make CMakeFiles/wet1.dir/library1.cpp.obj
+.PHONY : library1.cpp.obj
+
+library1.i: library1.cpp.i
+
+.PHONY : library1.i
+
+# target to preprocess a source file
+library1.cpp.i:
+	$(MAKE) -f CMakeFiles\wet1.dir\build.make CMakeFiles/wet1.dir/library1.cpp.i
+.PHONY : library1.cpp.i
+
+library1.s: library1.cpp.s
+
+.PHONY : library1.s
+
+# target to generate assembly for a file
+library1.cpp.s:
+	$(MAKE) -f CMakeFiles\wet1.dir\build.make CMakeFiles/wet1.dir/library1.cpp.s
+.PHONY : library1.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -158,6 +185,9 @@ help:
 	@echo ... wet1
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... library1.obj
+	@echo ... library1.i
+	@echo ... library1.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

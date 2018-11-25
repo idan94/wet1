@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "C:/Users/idanc/CLionProjects/wet1/library1.cpp" "C:/Users/idanc/CLionProjects/wet1/cmake-build-debug/CMakeFiles/wet1.dir/library1.cpp.obj"
   "C:/Users/idanc/CLionProjects/wet1/main.cpp" "C:/Users/idanc/CLionProjects/wet1/cmake-build-debug/CMakeFiles/wet1.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

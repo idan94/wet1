@@ -82,6 +82,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/idanc/CLionProjects/wet1/TreeMap.h">
+			<Option target="wet1"/>
+		</Unit>
+		<Unit filename="C:/Users/idanc/CLionProjects/wet1/library1.cpp">
+			<Option target="wet1"/>
+		</Unit>
+		<Unit filename="C:/Users/idanc/CLionProjects/wet1/library1.h">
+			<Option target="wet1"/>
+		</Unit>
 		<Unit filename="C:/Users/idanc/CLionProjects/wet1/main.cpp">
 			<Option target="wet1"/>
 		</Unit>
