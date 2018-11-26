@@ -6,7 +6,31 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/idanc/CLionProjects/wet1/main.cpp
-iostream
+C:/Users/idanc/CLionProjects/wet1/TreeMap.h
+stdexcept
 -
+exception
+-
+
+C:/Users/idanc/CLionProjects/wet1/library1.cpp
+library1.h
+C:/Users/idanc/CLionProjects/wet1/library1.h
+TreeMap.h
+C:/Users/idanc/CLionProjects/wet1/TreeMap.h
+
+C:/Users/idanc/CLionProjects/wet1/library1.h
+
+C:/Users/idanc/CLionProjects/wet1/main.cpp
+assert.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+time.h
+-
+library1.h
+C:/Users/idanc/CLionProjects/wet1/library1.h
 
