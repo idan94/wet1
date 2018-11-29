@@ -5,38 +5,44 @@
 #include "library1.h"
 #include "TreeMap.h"
 
+template<class T>
 void *Init() {
-    TreeMap<void*> *DS = new TreeMap<void*>();
+    TreeMap<T> *DS = new TreeMap<void *>();
     return (void *) DS;
 }
 
+template<class T>
 StatusType Add(void *DS, int key, void *value, void **node) {
     if (!DS) return INVALID_INPUT;
-    return ((TreeMap<void*> *) DS)->addNodeTree(key,&value,node); //TODO:AVL
+    return ((TreeMap<T> *) DS)->addNodeAvl(key, &value, node); //TODO:AVL
 }
 
-StatusType Find(void *DS, int key, void *value) {
+template<class T>
+StatusType Find(void *DS, int key, void **value) {
     if (!DS) return INVALID_INPUT;
-    return ((TreeMap<void*> *) DS)->findNode(key, (Node<void *> *) value,
-                                      ((TreeMap<void*> *) DS)->getRoot());
+    return ((TreeMap<T> *) DS)->findNode(key, ((TreeMap<T> *) DS)->getRoot());
 }
 
+template<class T>
 StatusType Delete(void *DS, int key) {
     if (!DS) return INVALID_INPUT;
-    return ((TreeMap<void*> *) DS)->deleteNodeTree(key);  //TODO:AVL
+    return ((TreeMap<T> *) DS)->deleteNodeAvl(key);  //TODO:AVL
 }
 
+template<class T>
 StatusType DeleteByPointer(void *DS, void *p) {
     if (!DS) return INVALID_INPUT;
-    return ((TreeMap<void*> *) DS)->deleteNodeByPtr((Node<void *> *) p);
+    return ((TreeMap<T> *) DS)->deleteNodeByPtr((Node<T> *) p);
 }
 
+template<class T>
 StatusType Size(void *DS, int *n) {
-    if (!DS) return INVALID_INPUT;
-    ((TreeMap<void*> *) DS)->getSize(n);
+    if (!DS || !n) return INVALID_INPUT;
+    ((TreeMap<T> *) DS)->getSize(n);
     return SUCCESS;
 }
 
+template<class T>
 void Quit(void **DS) {
     delete DS;
 }

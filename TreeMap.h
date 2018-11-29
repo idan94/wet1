@@ -24,7 +24,7 @@ public:
                 fatherPtr(nullptr),
                 leftSunPtr(nullptr),
                 rightSunPtr(nullptr),
-                height(0) {}
+                height(0) {} //TODO : delete?
 
     Node<T>(int key, T *t) : key(key),
                              object(nullptr),
@@ -75,6 +75,21 @@ public:
         this->height = newHeight;
     }
 
+    int fixHeight() {
+        int left, right;
+        if (!this->getLeftSunPtr()) {
+            left = -1;
+        } else {
+            left = this->getLeftSunPtr()->getHeight();
+        }
+        if (!this->getRightSunPtr()) {
+            right = -1;
+        } else {
+            right = this->getRightSunPtr()->getHeight();
+        }
+        this->setHeight(left>right ? left+1 : right+1);
+    }
+
     Node<T> *getFatherPtr() const {
         return this->fatherPtr;
     };
@@ -120,7 +135,14 @@ public:
     }
 
     int getBalance() const {
-        return (getLeftSunPtr()->getHeight() - getRightSunPtr()->getHeight());
+        int left=0,right=0;
+        if(this->getLeftSunPtr()){
+            left = this->getLeftSunPtr()->getHeight();
+        }
+        if(this->getRightSunPtr()){
+            right = this->getRightSunPtr()->getHeight();
+        }
+        return (left-right);
     }
 
     bool isBalanced() const {
@@ -173,7 +195,7 @@ public:
     TreeMap &operator=(const TreeMap &a)= default;
 
     //Rotations:
-    void Rotate(Node<T> *node) {
+    void rotate(Node<T> *node) {
         if (node->getBalance() == 2) {        //left_____
             if (node->getLeftSunPtr()->getBalance() >= 0) {   //leftLeft
                 leftLeftRotate(node);
@@ -233,18 +255,32 @@ public:
         return newFather;
     }
 
-    StatusType findNode(int key, Node<T> *node, Node<T> *root) const {
-        node = root;
-        if (!node) {        //if we got into null
+    StatusType findNode(int key, Node<T> **node) const {
+        if (!this->getRoot()) {
             return FAILURE;
         }
+        //*node = root;
+
+        return findNodeAux(key, root,node);
+    }
+
+    StatusType findNodeAux(int key, Node<T> *node,Node<T> **wanted) const {
         if (node->getKey() == key) {        //if we found they key
+            *wanted=node;
             return SUCCESS;
         }
         if (node->getKey() > key) {
-            return findNode(key, node, node->getLeftSunPtr());
+            if (!node->getLeftSunPtr()) {
+                *wanted=node;
+                return FAILURE;
+            }
+            return findNodeAux(key, node->getLeftSunPtr(),wanted);
         } else { // case: it->getKey() < key)
-            return findNode(key, node, node->getRightSunPtr());
+            if (!node->getRightSunPtr()) {
+                *wanted=node;
+                return FAILURE;
+            }
+            return findNodeAux(key, node->getRightSunPtr(),wanted);
         }
     }
 
@@ -265,18 +301,19 @@ public:
     }*/
     StatusType addNodeAvl(int key, T *t, void **node) {
         addNodeTree(key, t, node);
-        ((Node<T> *) node)->setHeight(0);
-        while (((Node<T> *) node) != root) {
-            Node<T> *parent = ((Node<T> *) node)->getFatherPtr();
-            if (parent->getHeight() >= ((Node<T> *) node)->getHeight()) {
+        ((Node<T> *) *node)->fixHeight();
+        while (((Node<T> *) *node) != root) {
+            Node<T> *parent = ((Node<T> *) *node)->getFatherPtr();
+            if (parent->getHeight() >= ((Node<T> *) *node)->getHeight() + 1) {
                 return SUCCESS;
             }
             parent->setHeight(((Node<T> *) node)->getHeight() + 1);
             if (!parent->isBalanced()) {
-                Rotate(parent);
+                rotate(parent);
                 return SUCCESS;
             } else {
-                ((Node<T> *) node) = parent;
+                // ((Node<T> *) node) = parent;
+                *node = (void *) parent;
             }
         }
 
@@ -287,37 +324,67 @@ public:
             try {
                 Node<T> *newNode = new Node<T>(key, t);
                 root = newNode;
+                *node = newNode;
             }
             catch (std::bad_alloc &a) {
                 return ALLOCATION_ERROR;
             }
+            size++;
+
             return SUCCESS;
         }
         Node<T> *lastCheck = nullptr;
-        StatusType findStatus = findNode(key, lastCheck, root);
+        StatusType findStatus = findNode(key, &lastCheck);
         if (findStatus == SUCCESS) {
             return FAILURE;
         } else {       //there is no key like this, and we will insert new Node<T>
-            Node<T> newNode(key, t);
+            *node = new Node<T>(key, t);
             this->size++;
             if (key < lastCheck->getKey()) {
-                lastCheck->setLeftSun(&newNode);
-                newNode.setFather(lastCheck);
+                lastCheck->setLeftSun(((Node<T> *) *node));
+                ((Node<T> *) *node)->setFather(lastCheck);
             } else {      //when key> lastCheck->getKey()
-                lastCheck->setRightSun(&newNode);
-                newNode.setFather(lastCheck);
+                lastCheck->setRightSun(((Node<T> *) *node));
+                ((Node<T> *) *node)->setFather(lastCheck);
             }
+
             return SUCCESS;
         }
     }
 
     StatusType deleteNodeAvl(int key) {
+        Node<T> *node = nullptr;
+        deleteNodeTree(key, node);
+        while (node != root) {
+            //step 1: Update h(v)
+            int prevHeight = node->getHeight();
+            if (node->numberOfSuns() == 0) {
+                node->setHeight(0);
+            } else {      //means node have ONE son only
+                if (!node->getLeftSunPtr()) { //if there is left son
+                    node->setHeight(node->getLeftSunPtr()->getHeight() + 1);
+                } else {      //means node have only right son
+                    node->setHeight(node->getRightSunPtr()->getHeight() + 1);
+                }
+            }
+            //step 2: check balance, rotate if needed and go up
+            if (!node->isBalanced()) {
+                rotate(node);
+                node = node->getFatherPtr();
+                continue;
+            }
+            if (node->getHeight() == prevHeight) {
+                return SUCCESS;
+            } else {      //the height has benn changed and BS is good
+                node = node->getFatherPtr();
+            }
+        }
 
     }
 
-    StatusType deleteNodeTree(int key) {
+    StatusType deleteNodeTree(int key, Node<T> *fatherOfDeleted) {
         Node<T> *node = nullptr;
-        StatusType findStatus = findNode(key, node, root);
+        StatusType findStatus = findNode(key, &node);
         int numberOfSuns = node->numberOfSuns();
         if (findStatus == FAILURE) {
             return FAILURE;
@@ -327,34 +394,36 @@ public:
                     Node<T> *father = node->getFatherPtr();
                     if (father->getLeftSunPtr() == node) {
                         father->setLeftSun(nullptr);
-                    } else { //means node is the right sun of his father.
+                    } else { //means node is the right son of his father.
                         father->setRightSun(nullptr);
                     }
+                    *fatherOfDeleted = *father;
                     delete node;
                     this->size--;
                     return SUCCESS;
                 }
-                case 1: { //there is ONE sun to node
-                    //we will let node's father to point to his sun
+                case 1: { //there is ONE son to node
+                    //we will let node's father to point to his son
                     Node<T> *father = node->getFatherPtr();
                     if (father->getLeftSunPtr() == node) {
-                        //node is the left sun
+                        //node is the left son
                         if (node->getLeftSunPtr()) {
                             father->setLeftSun(node->getLeftSunPtr());
                             (father->getLeftSunPtr())->setFather(father);
-                        } else { //means node has ONLY right sun
+                        } else { //means node has ONLY right son
                             father->setLeftSun(node->getRightSunPtr());
                             (father->getLeftSunPtr())->setFather(father);
                         }
-                    } else {    //node is the right sun
+                    } else {    //node is the right son
                         if (node->getLeftSunPtr()) {
                             father->setRightSun(node->getLeftSunPtr());
                             (father->getRightSunPtr())->setFather(father);
-                        } else { //means node has ONLY right sun
+                        } else { //means node has ONLY right son
                             father->setRightSun(node->getRightSunPtr());
                             (father->getRightSunPtr())->setFather(father);
                         }
                     }
+                    *fatherOfDeleted = *father;
                     delete node;
                     this->size--;
                     return SUCCESS;
@@ -365,7 +434,7 @@ public:
                         swappingNode = swappingNode->getLeftSunPtr();
                     }
                     swappingNode->swap(node);
-                    return deleteNodeTree(key);
+                    return deleteNodeTree(key, fatherOfDeleted);
                 }
             }
         }
@@ -375,7 +444,7 @@ public:
         if (!node) {
             return INVALID_INPUT;
         }
-        return deleteNodeTree(node->getKey());
+        return deleteNodeAvl(node->getKey());
     }
 
     StatusType getSize(int *n) const {

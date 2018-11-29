@@ -5,6 +5,7 @@ CMakeFiles/wet1.dir/library1.cpp.obj: ../TreeMap.h
 CMakeFiles/wet1.dir/library1.cpp.obj: ../library1.cpp
 CMakeFiles/wet1.dir/library1.cpp.obj: ../library1.h
 
+CMakeFiles/wet1.dir/main.cpp.obj: ../TreeMap.h
 CMakeFiles/wet1.dir/main.cpp.obj: ../library1.h
 CMakeFiles/wet1.dir/main.cpp.obj: ../main.cpp
 

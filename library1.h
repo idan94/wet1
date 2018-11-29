@@ -59,7 +59,7 @@ StatusType Add(void *DS, int key, void* value, void** node);
  *                FAILURE - If the item does not exist in the DS.
  *                SUCCESS - If the item is found in the DS.
  */
-StatusType Find(void *DS, int key, void* value);
+StatusType Find(void *DS, int key, void** value);
 
 /* Description:   Delete an item from the data structure.
  * Input:         DS - A pointer to the data structure.
