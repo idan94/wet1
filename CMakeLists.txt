@@ -3,4 +3,4 @@ project(wet1)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(wet1 main.cpp TreeMap.h library1.cpp main.cpp)
+add_executable(wet1 main.cpp library1.cpp TreeMap.h)
